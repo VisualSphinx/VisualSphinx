@@ -1,0 +1,7 @@
+
+huggingface-hub
+datasets
+pillow
+anthropic
+tqdm
+backoff
