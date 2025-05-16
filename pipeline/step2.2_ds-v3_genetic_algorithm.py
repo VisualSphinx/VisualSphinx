@@ -1691,3 +1691,7 @@ if __name__ == "__main__":
         )
     else:
         print(f"Error: Unknown mode '{args.mode}'. Use 'run' or 'resume'.")
+
+
+# Run the script with `python step2.2_ds-v3_genetic_algorithm.py [mode] [options]`. The `mode` can be `run` (default) or `resume`. Use `-h` for all options.
+# Customize with flags like `--generations <number>`, `--no_api`, or resume directly with `--resume_checkpoint_path <path_to_checkpoint.pkl>`.
