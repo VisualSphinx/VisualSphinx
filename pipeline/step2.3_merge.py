@@ -1,5 +1,5 @@
 """
-Merge seed_rules and evolved_rules from two JSON files, reassign IDs from zero,
+Merge 2.2_evolved_rules and 2.2_evolved_rules_others from two JSON files, reassign IDs from zero,
 and remap parent IDs accordingly.
 """
 

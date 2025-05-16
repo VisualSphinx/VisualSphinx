@@ -1,62 +1,50 @@
 ## Task Description
-You are an expert in analyzing and synthesizing complex vision logic puzzles. Your task is to crossover and combine two sets of puzzle regularities to create a novel, coherent rule set that could use to generate new puzzles. Rather than mechanically combining individual points, you need to understand the underlying logic and context of both rule sets to create meaningful hybrid patterns that maintain internal consistency. 
+You are an expert in analyzing and evolving complex vision logic puzzles. Your task is to mutate an existing set of puzzle regularities to create a novel, coherent rule set that maintains the core essence while introducing interesting variations.
 
 Please follow these steps:
 
-1. Analyze both rule sets:
-   - List out key elements from each rule set
-   - Identify core principles, compatibility, and potential synergies
-   - Look for opportunities to create emergent patterns through combination
-   - Identify potential conflicts and propose resolutions
+1. Analyze the existing rule set:
+   - Identify the core principles and key elements
+   - Understand the underlying logic and structure
 
-2. Wrap your detailed analysis in <comparative_analysis> tags:
-   - Compare and contrast the rule sets
-   - Identify complementary regularities and explore potential synergies
-   - Consider application to puzzle generation
-   - Analyze and propose resolutions for potential conflicts
+2. Wrap your analysis in <analysis> tags:
+   - Describe key insights about the rule structure
+   - Identify opportunities for creative mutation
+   - Explain which aspects should be preserved vs. modified
 
-3. Wrap your cross-over synthesis in <synthesis> tags:
-   - Explain how you've integrated elements from both rule sets
-   - Describe how the new combined regularities work together
-   - Illustrate potential puzzle scenarios
-   - Explain the coherence and unity of your cross-over
-   - Discuss how it maintains core insights and ensures contextual continuity
+3. Create a mutated version with controlled changes:
+   - Introduce meaningful variations to one point or two points of the rules
+   - Ensure the mutations maintain logical coherence
+   - Preserve the core puzzle structure and logic
+   - Aim for a mutation that could generate novel but solvable puzzles
 
-4. Wrap your final cross-over rule set in <crossover_rules> tags:
-   - Each rule should be less than 30 words and incorporate elements from both source rule sets
-   - Aim for 4-6 cohesive items that flow logically and create a complete puzzle system
-   - Ensure the rules could plausibly generate square-format continuous image puzzles
-   - Check for contextual integrity, preservation of fundamental insights, and logical progression
+4. Wrap your final mutated rule set in <mutated_rules> tags:
+   - Each rule should be less than 30 words
+   - Include 4-6 rules total (similar to the input set)
+   - Ensure the mutated rules maintain logical consistency
+   - The mutation should be meaningful but not completely transform the puzzle type
 
 ## Input
-Here are the two sets of puzzle regularities:
+Here is the set of puzzle regularities to mutate:
 
-<first_rule_set>
-{FIRST_RULE_SET}
-</first_rule_set>
-
-<second_rule_set>
-{SECOND_RULE_SET}
-</second_rule_set>
+<rule_set>
+{RULE_SET}
+</rule_set>
 
 ## Output
 Your final output should follow this structure:
 
-<comparative_analysis>
-[Your detailed comparative analysis]
-</comparative_analysis>
+<analysis>
+[Your analysis of the existing rules]
+</analysis>
 
-<synthesis>
-[Your explanation of the integrated elements and how they work together]
-</synthesis>
+<mutated_rules>
+- [Mutated Rule 1]
+- [Mutated Rule 2]
+- [Mutated Rule 3]
+- [Mutated Rule 4]
+- [Mutated Rule 5]
+- [Mutated Rule 6] (optional)
+</mutated_rules>
 
-<crossover_rules>
-- [Cross-over Rule 1]
-- [Cross-over Rule 2]
-- [Cross-over Rule 3]
-- [Cross-over Rule 4]
-- [Cross-over Rule 5]
-- [Cross-over Rule 6] (optional)
-</crossover_rules>
-
-Remember, your cross-over should be a thoughtful integration that preserves context and creates emergent properties, not a mechanical merging of the original rules.
+Remember, effective mutation preserves the essence of the original while introducing novel and interesting variations.
