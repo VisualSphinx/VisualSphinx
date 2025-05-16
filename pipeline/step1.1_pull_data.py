@@ -177,7 +177,7 @@ def main():
     )
     parser.add_argument(
         "--dataset_name",
-        default="VisualSphnix/VisualSphnix-Seeds",
+        default="VisualSphinx/VisualSphinx-Seeds",
         help="Hugging Face dataset name.",
     )
     parser.add_argument(
