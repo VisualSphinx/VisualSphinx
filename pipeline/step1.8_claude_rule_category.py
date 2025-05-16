@@ -30,7 +30,7 @@ def parse_args():
         "--output", type=str, default="./data/step1_filtered/1.8_rule_class.json"
     )
     parser.add_argument("--api_key", type=str, default=None)
-    parser.add_argument("--template", type=str, default="Prompts/step1.8_classify.md")
+    parser.add_argument("--template", type=str, default="Prompts/step1.8_category.md")
     parser.add_argument("--model", type=str, default="claude-3-7-sonnet-20250219")
     parser.add_argument("--batch_size", type=int, default=20)
     parser.add_argument("--max_tokens", type=int, default=8192)

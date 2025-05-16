@@ -5,3 +5,8 @@ pillow
 anthropic
 tqdm
 backoff
+together
+torch
+faiss-gpu
+sentence_transformers
+numpy==1.26.4
