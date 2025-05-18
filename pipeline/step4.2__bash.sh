@@ -1,0 +1,3 @@
+python step4.2_add_information.py --input_puzzle ./data/step4/Dataset_style_1_4options/4.1_puzzles.json --output ./data/step4/Dataset_style_1_4options/4.2_puzzles_with_rules.json
+python step4.2_add_information.py --input_puzzle ./data/step4/Dataset_style_2_4options/4.1_puzzles.json --output ./data/step4/Dataset_style_2_4options/4.2_puzzles_with_rules.json
+python step4.2_add_information.py --input_puzzle ./data/step4/Dataset_style_3_4options/4.1_puzzles.json --output ./data/step4/Dataset_style_3_4options/4.2_puzzles_with_rules.json
