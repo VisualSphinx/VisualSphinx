@@ -14,11 +14,25 @@ def parse_args():
         description="Merge ds1, ds2, ds3 (each has 4.7_puzzles_all.json + images/) "
         "into a consolidated dataset."
     )
-    p.add_argument("ds1", help="Path to first dataset folder")
-    p.add_argument("ds2", help="Path to second dataset folder")
-    p.add_argument("ds3", help="Path to third dataset folder")
     p.add_argument(
-        "-o", "--output", default="merged_dataset", help="Output directory name"
+        "--ds1",
+        default="./data/step4/Dataset_style_1_4options",
+        help="Path to first dataset folder",
+    )
+    p.add_argument(
+        "--ds2",
+        default="./data/step4/Dataset_style_2_4options",
+        help="Path to second dataset folder",
+    )
+    p.add_argument(
+        "--ds3",
+        default="./data/step4/Dataset_style_3_4options",
+        help="Path to third dataset folder",
+    )
+    p.add_argument(
+        "--output",
+        default="./data/Dataset/4options",
+        help="Output directory name",
     )
     return p.parse_args()
 
