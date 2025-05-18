@@ -10,10 +10,13 @@ def get_args():
     )
     ap.add_argument(
         "--input",
-        default="./data/step3/3.2_valid_style_1.jsonl",
+        default="./data/step4/Dataset_style_1_4options/4.2_puzzles_with_rules.json",
         help="original items JSON",
     )
-    ap.add_argument("--output", default="items_filtered.json")
+    ap.add_argument(
+        "--output",
+        default="./data/step4/Dataset_style_1_4options/4.3_puzzles_filtered.json",
+    )
     return ap.parse_args()
 
 
