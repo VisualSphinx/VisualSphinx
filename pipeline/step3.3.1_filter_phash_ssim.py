@@ -21,8 +21,10 @@ def get_args():
     ap = argparse.ArgumentParser("pHash / SSIM checker (multiprocess)")
     ap.add_argument("--ids_json", default="./data/step3/3.2_valid_style_1.json")
     ap.add_argument("--root_dir", default="./data/step3/3.1_all_scripts_style_1")
-    ap.add_argument("--summary_file", default="./data/step3/3.3_phash_summary.jsonl")
-    ap.add_argument("--raw_file", default="./data/step3/3.3_phash_raw.jsonl")
+    ap.add_argument(
+        "--summary_file", default="./data/step3/3.3_phash_summary_style_1.jsonl"
+    )
+    ap.add_argument("--raw_file", default="./data/step3/3.3_phash_raw_style_1.jsonl")
 
     ap.add_argument("--hash_thresh", type=int, default=2)
     ap.add_argument("--dup_pair_thresh", type=int, default=2)
