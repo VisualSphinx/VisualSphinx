@@ -1,7 +1,5 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
-Fast puzzle generator with multiprocessing and command-line configuration.
+Generate 4-option puzzle
 """
 
 import os
@@ -12,26 +10,25 @@ from PIL import Image, ImageDraw, ImageFont
 from tqdm import tqdm
 from concurrent.futures import ProcessPoolExecutor, as_completed
 
-# --- Command-line parameters (must be at the very top) ---
 parser = argparse.ArgumentParser(description="Generate puzzles with multiprocessing")
 parser.add_argument(
     "--output",
     type=str,
-    default="../Dataset/Dataset_Synthetic_3_4/raw_data",
+    default="./data/step4/Dataset_style_1_4options",
     help="Base output directory",
 )
 parser.add_argument(
     "--input",
     dest="input_file",
     type=str,
-    default="valid_ids_3.json",
+    default="./data/step3/3.2_valid_style_1.json",
     help="JSON file with list of IDs to process",
 )
 parser.add_argument(
     "--root",
     dest="root_dir",
     type=str,
-    default="all_scripts_3",
+    default="./data/step3/3.1_all_scripts_style_1",
     help="Root directory containing ID_attempt folders",
 )
 parser.add_argument(
@@ -267,7 +264,7 @@ if __name__ == "__main__":
         args.grid_margin,
         args.max_workers,
     )
-    out_json = os.path.join(args.output, "puzzles.json")
+    out_json = os.path.join(args.output, "4.1_puzzles.json")
     with open(out_json, "w", encoding="utf-8") as f:
         json.dump(puzzles, f, indent=2)
     print(f"Created {len(puzzles)} puzzles and saved to {out_json}")
