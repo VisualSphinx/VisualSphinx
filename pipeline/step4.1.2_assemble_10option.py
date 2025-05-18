@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
 """
 Generate puzzles from script-generated images using multiprocessing.
 """

@@ -54,7 +54,7 @@ def parse_args():
     parser.add_argument(
         "--output_file",
         type=str,
-        default="./data/step3/3.2_valid_style_1.jsonl",
+        default="./data/step3/3.2_valid_style_1.json",
         help="Path to save the resulting valid IDs JSON",
     )
     return parser.parse_args()
