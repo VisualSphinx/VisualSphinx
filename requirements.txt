@@ -10,3 +10,7 @@ torch
 faiss-gpu
 sentence_transformers
 numpy==1.26.4
+openai
+matplotlib
+imagehash
+scikit-image
