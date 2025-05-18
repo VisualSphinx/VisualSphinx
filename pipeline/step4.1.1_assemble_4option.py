@@ -1,157 +1,98 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
 """
-Generate visual puzzles from script outputs using multiprocessing.
+Fast puzzle generator with multiprocessing and command-line configuration.
 """
 
 import os
 import json
 import random
 import argparse
-from pathlib import Path
-from concurrent.futures import ProcessPoolExecutor, as_completed
 from PIL import Image, ImageDraw, ImageFont
 from tqdm import tqdm
+from concurrent.futures import ProcessPoolExecutor, as_completed
+
+# --- Command-line parameters (must be at the very top) ---
+parser = argparse.ArgumentParser(description="Generate puzzles with multiprocessing")
+parser.add_argument(
+    "--output",
+    type=str,
+    default="../Dataset/Dataset_Synthetic_3_4/raw_data",
+    help="Base output directory",
+)
+parser.add_argument(
+    "--input",
+    dest="input_file",
+    type=str,
+    default="valid_ids_3.json",
+    help="JSON file with list of IDs to process",
+)
+parser.add_argument(
+    "--root",
+    dest="root_dir",
+    type=str,
+    default="all_scripts_3",
+    help="Root directory containing ID_attempt folders",
+)
+parser.add_argument(
+    "--cell_size", type=int, default=400, help="Size of each puzzle cell in pixels"
+)
+parser.add_argument(
+    "--grid_margin", type=int, default=30, help="Margin around the puzzle grid"
+)
+parser.add_argument(
+    "--workers",
+    dest="max_workers",
+    type=int,
+    default=15,
+    help="Number of worker processes",
+)
+args = parser.parse_args()
+
+# --- Helper functions ---
 
 
-def parse_args():
-    """
-    Define and parse command-line arguments.
-    """
-    parser = argparse.ArgumentParser(description="Generate puzzles from script outputs")
-    parser.add_argument(
-        "--root_dir",
-        type=str,
-        default="./data/step3/3.1_all_scripts_style_1",
-        help="Root directory containing script folders",
-    )
-    parser.add_argument(
-        "--input_file",
-        type=str,
-        default="./data/step3/3.2_valid_style_1.jsonl",
-        help="JSON file with a list of valid IDs",
-    )
-    parser.add_argument(
-        "--output_dir",
-        type=str,
-        default="../Dataset/Dataset_Synthetic_3_4/raw_data",
-        help="Directory to save generated puzzles",
-    )
-    parser.add_argument(
-        "--cell_size", type=int, default=400, help="Size of each puzzle cell in pixels"
-    )
-    parser.add_argument(
-        "--grid_margin",
-        type=int,
-        default=30,
-        help="Margin around the entire puzzle grid",
-    )
-    parser.add_argument(
-        "--max_workers", type=int, default=15, help="Number of parallel workers to use"
-    )
-    return parser.parse_args()
-
-
-def process_single_id(id_num, root_dir, image_dir, cell_size, grid_margin):
-    """
-    Process a single ID: find its latest attempt folder, validate images,
-    create the puzzle image, and return puzzle metadata.
-    """
-    max_attempt = None
+def find_max_attempt(root_dir: str, id_num) -> str | None:
+    """Find the maximum attempt number for a given ID."""
     max_num = -1
-    for entry in os.listdir(root_dir):
-        parts = entry.split("_")
-        if len(parts) == 2 and parts[0] == str(id_num):
-            try:
-                num = int(parts[1])
-                if num > max_num:
-                    max_num = num
-                    max_attempt = parts[1]
-            except ValueError:
-                continue
-    if max_attempt is None:
-        return None
-
-    folder = Path(root_dir) / f"{id_num}_{max_attempt}"
-    correct_images = get_images_from_dir(folder / "output_correct")
-    incorrect_images = get_images_from_dir(folder / "output_incorrect")
-    if len(correct_images) != 5 or len(incorrect_images) != 3:
-        return None
-
-    images_dir = Path(image_dir)
-    images_dir.mkdir(parents=True, exist_ok=True)
-    output_path = images_dir / f"image_{id_num}.png"
-    relative_path = f"images/image_{id_num}.png"
-    answer = create_puzzle_image(
-        correct_images[:4],
-        correct_images[4:],
-        incorrect_images,
-        output_path,
-        cell_size,
-        grid_margin,
-    )
-    return {
-        "id": int(id_num),
-        "prompt": "From the four given options, select the most suitable one to fill in the question mark to present a certain regularity.",
-        "options": {"A": "A", "B": "B", "C": "C", "D": "D"},
-        "image": relative_path,
-        "correct_answer": answer,
-    }
+    selected = None
+    for name in os.listdir(root_dir):
+        path = os.path.join(root_dir, name)
+        if os.path.isdir(path):
+            parts = name.split("_")
+            if len(parts) == 2 and parts[0] == str(id_num):
+                try:
+                    num = int(parts[1])
+                    if num > max_num:
+                        max_num, selected = num, parts[1]
+                except ValueError:
+                    continue
+    return selected
 
 
-def create_puzzle_from_images(
-    id_list, root_dir, output_dir, cell_size, grid_margin, max_workers
-):
-    """
-    Generate puzzles in parallel for a list of IDs.
-    """
-    image_dir = Path(output_dir) / "images"
-    image_dir.mkdir(parents=True, exist_ok=True)
-    puzzles = []
-    with ProcessPoolExecutor(max_workers=max_workers) as executor:
-        futures = {
-            executor.submit(
-                process_single_id,
-                id_num,
-                root_dir,
-                image_dir,
-                cell_size,
-                grid_margin,
-            ): id_num
-            for id_num in id_list
-        }
-        for future in as_completed(futures):
-            result = future.result()
-            if result:
-                puzzles.append(result)
-    return puzzles
-
-
-def get_images_from_dir(directory):
-    """
-    Return a sorted list of image file paths in a directory.
-    """
-    if not directory.is_dir():
+def get_images_from_dir(directory: str) -> list[str]:
+    """Get a sorted list of image paths from a directory."""
+    if not os.path.isdir(directory):
         return []
-    extensions = {".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff"}
+    exts = {".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff"}
     return [
-        str(directory / f)
+        os.path.join(directory, f)
         for f in sorted(os.listdir(directory))
-        if Path(f).suffix.lower() in extensions
+        if os.path.splitext(f.lower())[1] in exts
     ]
 
 
 def create_puzzle_image(
-    question_images,
-    correct_image,
-    incorrect_images,
-    output_path,
-    cell_size=200,
-    grid_margin=30,
-):
+    question_images: list[str],
+    correct_image: list[str],
+    incorrect_images: list[str],
+    output_path: str,
+    cell_size: int,
+    grid_margin: int,
+) -> str:
     """
-    Create and save the puzzle image, return the correct answer option.
+    Create the puzzle image with given parameters.
+    Returns the correct answer label.
     """
     frame_thickness = 8
     font_size = 85
@@ -159,61 +100,57 @@ def create_puzzle_image(
     label_spacing = 70
     top_padding = 50
     image_margin = 15
-    inner = cell_size - 2 * image_margin
 
+    inner = cell_size - 2 * image_margin
     try:
         font = ImageFont.truetype("arial.ttf", font_size)
     except IOError:
         font = ImageFont.load_default()
 
-    def create_cell(path):
-        img = Image.open(path).convert("RGBA")
-        cell = Image.new("RGB", (inner, inner), "white")
+    imgs_q = [Image.open(p).convert("RGBA") for p in question_images]
+    opts = [Image.open(correct_image[0]).convert("RGBA")] + [
+        Image.open(p).convert("RGBA") for p in incorrect_images
+    ]
+    random.shuffle(opts)
+    labels = ["A", "B", "C", "D"]
+    # Determine correct answer label
+    correct = labels[opts.index(opts[0])]
+
+    def cell(img: Image.Image) -> Image.Image:
+        bg = Image.new("RGB", (inner, inner), "white")
         ar = img.width / img.height
         pad = inner * 5 // 100
-        max_w = inner - pad
-        max_h = inner - pad
+        maxw, maxh = inner - pad, inner - pad
         if ar > 1:
-            w = min(max_w, img.width)
+            w = min(maxw, int(inner))
             h = int(w / ar)
         else:
-            h = min(max_h, img.height)
+            h = min(maxh, int(inner))
             w = int(h * ar)
-        if img.width > w or img.height > h:
-            img = img.resize((w, h), Image.LANCZOS)
-        x = (inner - w) // 2
-        y = (inner - h) // 2
-        if img.mode == "RGBA":
-            tmp = Image.new("RGBA", cell.size, (255, 255, 255, 0))
-            tmp.paste(img, (x, y))
-            cell = Image.alpha_composite(cell.convert("RGBA"), tmp).convert("RGB")
+        w, h = max(1, w), max(1, h)
+        img2 = img.resize((w, h), Image.LANCZOS)
+        x, y = (inner - w) // 2, (inner - h) // 2
+        if img2.mode == "RGBA":
+            tmp = Image.new("RGBA", bg.size, (255, 255, 255, 0))
+            tmp.paste(img2, (x, y), img2)
+            bg = Image.alpha_composite(bg.convert("RGBA"), tmp).convert("RGB")
         else:
-            cell.paste(img, (x, y))
-        return cell
+            bg.paste(img2, (x, y))
+        return bg
 
-    def create_qm():
-        cell = Image.new("RGB", (inner, inner), "white")
-        draw = ImageDraw.Draw(cell)
-        try:
-            qm_font = ImageFont.truetype("arial.ttf", 150)
-        except IOError:
-            qm_font = ImageFont.load_default()
-        draw.text(
-            (inner // 2, inner // 2), "?", fill="black", font=qm_font, anchor="mm"
-        )
-        return cell
+    qm = Image.new("RGB", (inner, inner), "white")
+    d = ImageDraw.Draw(qm)
+    try:
+        qf = ImageFont.truetype("arial.ttf", 150)
+    except:
+        qf = ImageFont.load_default()
+    d.text((inner // 2, inner // 2), "?", font=qf, fill="black", anchor="mm")
 
-    q_cells = [create_cell(p) for p in question_images]
-    qm = create_qm()
-    answers = [correct_image[0]] + incorrect_images
-    random.shuffle(answers)
-    a_cells = [create_cell(p) for p in answers]
-
+    # compose
     top_w = 5 * cell_size
     bot_w = 4 * cell_size
-    grid_w = max(top_w, bot_w)
-    total_w = grid_w + 2 * grid_margin
-    total_h = (
+    W = max(top_w, bot_w) + 2 * grid_margin
+    H = (
         top_padding
         + 2 * cell_size
         + row_spacing
@@ -221,70 +158,116 @@ def create_puzzle_image(
         + font_size
         + grid_margin
     )
+    out = Image.new("RGB", (W, H), "white")
+    draw = ImageDraw.Draw(out)
 
-    final = Image.new("RGB", (total_w, total_h), "white")
-    draw = ImageDraw.Draw(final)
+    ox = grid_margin + (W - 2 * grid_margin - top_w) // 2
+    oy = top_padding
+    for i, img in enumerate(imgs_q):
+        out.paste(cell(img), (ox + i * cell_size + image_margin, oy + image_margin))
+    out.paste(qm, (ox + 4 * cell_size + image_margin, oy + image_margin))
 
-    x_top = grid_margin + (grid_w - top_w) // 2
-    y = top_padding
-    for i, cell in enumerate(q_cells):
-        final.paste(cell, (x_top + i * cell_size + image_margin, y + image_margin))
-    final.paste(qm, (x_top + 4 * cell_size + image_margin, y + image_margin))
+    oy += cell_size + row_spacing
+    ox2 = grid_margin + (W - 2 * grid_margin - bot_w) // 2
+    for i, img in enumerate(opts):
+        out.paste(cell(img), (ox2 + i * cell_size + image_margin, oy + image_margin))
 
-    x_bot = grid_margin + (grid_w - bot_w) // 2
-    y = top_padding + cell_size + row_spacing
-    for i, cell in enumerate(a_cells):
-        final.paste(cell, (x_bot + i * cell_size + image_margin, y + image_margin))
-
-    def draw_grid(x0, y0, cols):
-        draw.rectangle(
-            [(x0, y0), (x0 + cols * cell_size, y0 + cell_size)],
-            outline="black",
+    # grid and labels
+    draw.rectangle(
+        [(ox, top_padding), (ox + top_w, top_padding + cell_size)],
+        outline="black",
+        width=frame_thickness,
+    )
+    for i in range(1, 5):
+        draw.line(
+            [
+                (ox + i * cell_size, top_padding),
+                (ox + i * cell_size, top_padding + cell_size),
+            ],
+            fill="black",
             width=frame_thickness,
         )
-        for c in range(1, cols):
-            x = x0 + c * cell_size
-            draw.line(
-                [(x, y0), (x, y0 + cell_size)], fill="black", width=frame_thickness
-            )
+    draw.rectangle(
+        [(ox2, oy), (ox2 + bot_w, oy + cell_size)],
+        outline="black",
+        width=frame_thickness,
+    )
+    for i in range(1, 4):
+        draw.line(
+            [(ox2 + i * cell_size, oy), (ox2 + i * cell_size, oy + cell_size)],
+            fill="black",
+            width=frame_thickness,
+        )
+    for i, label in enumerate(labels):
+        lx = ox2 + i * cell_size + cell_size // 2
+        ly = oy + cell_size + label_spacing
+        draw.text((lx, ly), label, font=font, fill="black", anchor="mm")
 
-    draw_grid(x_top, top_padding, 5)
-    draw_grid(x_bot, top_padding + cell_size + row_spacing, 4)
-
-    labels = ["A", "B", "C", "D"]
-    for i in range(4):
-        lx = x_bot + i * cell_size + cell_size // 2
-        ly = top_padding + cell_size + row_spacing + cell_size + label_spacing
-        draw.text((lx, ly), labels[i], fill="black", font=font, anchor="mm")
-
-    if final.width > 800:
-        scale = 800 / final.width
-        final = final.resize((800, int(final.height * scale)), Image.LANCZOS)
-
-    final.save(output_path, quality=95)
-    idx = answers.index(correct_image[0])
-    return labels[idx]
+    if out.width > 800:
+        sc = 800 / out.width
+        out = out.resize((800, int(out.height * sc)), Image.LANCZOS)
+    out.save(output_path, quality=95)
+    return correct
 
 
-def main():
-    args = parse_args()
-    out_dir = Path(args.output_dir)
-    out_dir.mkdir(parents=True, exist_ok=True)
+def process_single_id(id_num, root_dir, image_dir, cell_size, grid_margin):
+    """Process one ID to generate a puzzle dict or None."""
+    att = find_max_attempt(root_dir, id_num)
+    if not att:
+        return None
+    folder = os.path.join(root_dir, f"{id_num}_{att}")
+    ci = get_images_from_dir(os.path.join(folder, "output_correct"))
+    ii = get_images_from_dir(os.path.join(folder, "output_incorrect"))
+    if len(ci) != 5 or len(ii) != 3:
+        return None
+    op = os.path.join(image_dir, f"image_{id_num}.png")
+    rel = f"images/image_{id_num}.png"
+    ans = create_puzzle_image(ci[:4], ci[4:], ii, op, cell_size, grid_margin)
+    return {
+        "id": int(id_num),
+        "prompt": "From the four given options, select the most suitable one to fill in the question mark to present a certain regularity.",
+        "options": {l: l for l in "ABCD"},
+        "image": rel,
+        "correct_answer": ans,
+    }
+
+
+def create_puzzle_from_images(
+    id_list, root_dir, output_dir, cell_size, grid_margin, max_workers
+):
+    """Generate puzzles for all IDs with multiprocessing and progress bar."""
+    img_dir = os.path.join(output_dir, "images")
+    os.makedirs(img_dir, exist_ok=True)
+    puzzles = []
+    args_list = [(i, root_dir, img_dir, cell_size, grid_margin) for i in id_list]
+    with ProcessPoolExecutor(max_workers=max_workers) as ex:
+        futs = {ex.submit(process_single_id, *a): a[0] for a in args_list}
+        for fut in tqdm(
+            as_completed(futs), total=len(futs), desc="Processing IDs", unit="id"
+        ):
+            try:
+                r = fut.result()
+                if r:
+                    puzzles.append(r)
+            except Exception as e:
+                print(f"Error ID {futs[fut]}: {e}")
+    return puzzles
+
+
+# --- Main ---
+if __name__ == "__main__":
+    os.makedirs(args.output, exist_ok=True)
     with open(args.input_file, "r", encoding="utf-8") as f:
-        ids = json.load(f).get("ids", [])
+        id_list = json.load(f).get("ids", [])
     puzzles = create_puzzle_from_images(
-        ids,
+        id_list,
         args.root_dir,
-        args.output_dir,
+        args.output,
         args.cell_size,
         args.grid_margin,
         args.max_workers,
     )
-    out_file = out_dir / "puzzles.json"
-    with open(out_file, "w", encoding="utf-8") as f:
-        json.dump(puzzles, f, ensure_ascii=False, indent=2)
-    print(f"Created {len(puzzles)} puzzles and saved to {out_file}")
-
-
-if __name__ == "__main__":
-    main()
+    out_json = os.path.join(args.output, "puzzles.json")
+    with open(out_json, "w", encoding="utf-8") as f:
+        json.dump(puzzles, f, indent=2)
+    print(f"Created {len(puzzles)} puzzles and saved to {out_json}")
