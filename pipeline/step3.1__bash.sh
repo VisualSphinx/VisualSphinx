@@ -1,0 +1,3 @@
+python step3.1_grok_generate.py --input_file ./data/step2/2.8_rules_filtered.json --output_file ./data/step3/3.1_style_1.jsonl --prompt_file step3.1_generation_style_1.md --folder_root ./data/step3/3.1_all_scripts_style_1
+python step3.1_grok_generate.py --input_file ./data/step2/2.8_rules_filtered.json --output_file ./data/step3/3.1_style_2.jsonl --prompt_file step3.1_generation_style_2.md --folder_root ./data/step3/3.1_all_scripts_style_2
+python step3.1_grok_generate.py --input_file ./data/step2/2.8_rules_filtered.json --output_file ./data/step3/3.1_style_3.jsonl --prompt_file step3.1_generation_style_3.md --folder_root ./data/step3/3.1_all_scripts_style_3
