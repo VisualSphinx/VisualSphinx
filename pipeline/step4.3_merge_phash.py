@@ -2,7 +2,7 @@ import argparse, json
 
 
 def get_args():
-    ap = argparse.ArgumentParser("merge & filter by summary file")
+    ap = argparse.ArgumentParser("merge & filter by phash summary file")
     ap.add_argument(
         "--summary",
         default="./data/step3/3.3_phash_summary.jsonl",
