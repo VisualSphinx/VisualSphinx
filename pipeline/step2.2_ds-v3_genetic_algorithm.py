@@ -68,7 +68,7 @@ def parse_args():
     parser.add_argument(
         "--max_workers",
         type=int,
-        default=60,  # Default from user's last full script
+        default=60,
         help="Maximum worker threads for parallel API calls.",
     )
     parser.add_argument(
@@ -104,7 +104,7 @@ def parse_args():
     parser.add_argument(
         "--resume_output_filename",
         type=str,
-        default="./data/step2/2.2_evolved_rules_resume.json",  # Corrected typo from _resuem
+        default="./data/step2/2.2_evolved_rules_resume.json",
         help="Output filename when resuming from a checkpoint.",
     )
     return parser.parse_args()
