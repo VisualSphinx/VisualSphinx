@@ -1,6 +1,6 @@
 # 🦁 VisualSphinx: Large-Scale Synthetic Vision Logic Puzzles for RL
 
-This is the official repository for paper "[VisualSphinx: Large-Scale Synthetic Vision Logic Puzzles for RL]". 
+This is the official repository for paper "VisualSphinx: Large-Scale Synthetic Vision Logic Puzzles for RL". 
 
 
 VisualSphinx is the largest fully-synthetic open-source dataset providing vision logic puzzles. It consists of over 660K automatically generated logical visual puzzles. Each logical puzzle is grounded with an interpretable rule and accompanied by both correct answers and plausible distractors.
