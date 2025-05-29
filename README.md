@@ -16,7 +16,7 @@ VisualSphinx is the largest fully-synthetic open-source dataset providing vision
   - [VisualSphinx (Rules)](https://huggingface.co/datasets/VisualSphinx/VisualSphinx-V1-Rules). 
 
 ## Overview
-![VisualSphinx](https://visualsphinx.github.io/static/images/main.pdf)
+![VisualSphinx](https://visualsphinx.github.io/static/images/pipeline-mini.jpg)
 ![performance](https://visualsphinx.github.io/static/images/performance.png)
 
 ## Installation
