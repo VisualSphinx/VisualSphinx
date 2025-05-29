@@ -8,7 +8,7 @@ VisualSphinx is the largest fully-synthetic open-source dataset providing vision
 - 🌐 [Project Website](https://visualsphinx.github.io/) - To discover more about VisualSphinx
 - 📖 [Technical Report]() - Discover the methodology and technical details behind VisualSphinx
 - 🔧 [Github Repo](https://github.com/VisualSphinx/VisualSphinx) - Access the complete pipeline used to produce VisualSphinx-V1
-- 🤗 HF Datasets:
+- 🤗 HF Datasets - Find all VisualSphinx-V1 datasets
   - [VisualSphinx-V1 (Raw)](https://huggingface.co/datasets/VisualSphinx/VisualSphinx-V1-Raw);
   - [VisualSphinx-V1 (For RL)](https://huggingface.co/datasets/VisualSphinx/VisualSphinx-V1-RL-20K); 
   - [VisualSphinx-V1 (Benchmark)](https://huggingface.co/datasets/VisualSphinx/VisualSphinx-V1-Benchmark);
@@ -34,24 +34,24 @@ pip install -r requirements.txt
 Please go into [pipeline](/pipeline) for reproduce VisualSphinx. Please do not forget to define your API-Keys in [api_config.py](pipeline/api_config.py).
 
 
-<!-- ## Features
-KodCode is a comprehensive pipeline designed to generate diverse, challenging, and verifiable synthetic datasets for coding tasks. Key features include:
-- **Diverse Sources:** Generate high-quality coding questions from multiple sources including zero-shot generation, human-written assessment questions, code snippets, and technical documentation - **all unified in a single framework!**
-- **Self-Verification:** Generate verifiable solutions and tests for each coding question. Support pytest and parallel execution.
-- **Style Converter:** Easy to convert between different styles of coding questions. -->
+## Features
+VisualSphinx is a comprehensive pipeline designed to generate large-scale, diverse, and verifiable synthetic datasets for vision logic puzzles. Key features include:
+- **Diverse Generation**: Automatically produces high-quality visual logic puzzles from a variety of sources and rule templates, supporting multiple puzzle styles and formats.
+- **Self-Verification**: Each puzzle is accompanied by correct answers and plausible distractors, with automated verification and scoring to ensure quality.
+- **Open & Reproducible**: All code, prompts, and data processing steps are open-source and fully documented for reproducibility and community extension.
 
 
 ## Training
 
 Please refer to [verl](https://github.com/volcengine/verl) for RL training using VisualSphinx datasets, which is based on .
 
-## 🧐 Other Information
+## Other Information
 
 **License**: Please follow [MIT](https://choosealicense.com/licenses/mit/).
 
 **Contact**: For questions, suggestions, or feedback, please reach out to [Yichen](mailto:yfeng42@uw.edu), or [raise an issue](https://github.com/VisualSphinx/VisualSphinx/issues/new). We welcome your input and are committed to continuously improving VisualSphinx to better serve the community.
 
-## 📚 Citation
+## Citation
 
 If you find the model, data, or code useful, please cite:
 ```
