@@ -41,8 +41,8 @@ Merge into a new json.
 ```bash
 python step1.3_merge.py
 ```
-- Input: Multiple rewritten results
-- Output: Merged JSON
+- Input: Multiple rewritten JSON files (from different annotators or models)
+- Output: `./data/step1/1.3_merged_rewrites.json`
 
 ### 1.4 Verification (Claude)
 
@@ -51,8 +51,8 @@ Perform a consistency check by feeding each image–explanation pair to Claude t
 ```bash
 python step1.4_claude_verify.py
 ```
-- Input: Rewritten questions
-- Output: Verification results
+- Input: `./data/step1/1.3_merged_rewrites.json`
+- Output: `./data/step1/1.4_verified_rewrites.json`
 
 ### 1.5 Filter Correct Questions
 
@@ -61,8 +61,8 @@ Filter last step questions.
 ```bash
 python step1.5_filter_correct.py
 ```
-- Input: Verification results
-- Output: Filtered questions
+- Input: `./data/step1/1.4_verified_rewrites.json`
+- Output: `./data/step1/1.5_filtered_questions.json`
 
 ### 1.6 Rule Abstraction (Claude)
 
@@ -71,8 +71,8 @@ Each of these remaining questions is then abstracted into a structured seed rule
 ```bash
 python step1.6_claude_rule_abstraction.py
 ```
-- Input: Questions
-- Output: Abstracted rules
+- Input: `./data/step1/1.5_filtered_questions.json`
+- Output: `./data/step1/1.6_abstracted_rules.json`
 
 ### 1.7 Rule Extraction
 
@@ -81,8 +81,8 @@ Process last step results.
 ```bash
 python step1.7_rule_extract.py
 ```
-- Input: Abstraction results
-- Output: Rule list
+- Input: `./data/step1/1.6_abstracted_rules.json`
+- Output: `./data/step1/1.7_extracted_rules.json`
 
 ### 1.8 Rule Categorization (Claude)
 
@@ -91,8 +91,8 @@ Categorized into 8 classes with Claude based on their visual patterns and requir
 ```bash
 python step1.8_claude_rule_category.py
 ```
-- Input: Rules
-- Output: Categorized rules
+- Input: `./data/step1/1.7_extracted_rules.json`
+- Output: `./data/step1/1.8_categorized_rules.json`
 
 ### 1.9 Merge All Rules
 
@@ -101,8 +101,8 @@ Merge into a new json.
 ```bash
 python step1.9_merge.py
 ```
-- Input: Categorized rules
-- Output: Final rule set
+- Input: All categorized rule files (e.g., from different categories)
+- Output: `./data/step1/1.9_all_rules.json`
 
 ### 1.10 Manually Check
 
@@ -123,8 +123,8 @@ Split into two groups.
 ```bash
 python step2.1_classify_two_groups.py
 ```
-- Input: Final rule set
-- Output: Grouped rules
+- Input: `./data/step1/1.9_all_rules.json`
+- Output: `./data/step2/2.1_grouped_rules.json`
 
 ### 2.2 Rule Mutation Generation (DeepSeek V3)
 
@@ -149,7 +149,7 @@ Merge two groups.
 python step2.3_merge.py
 ```
 - Input: Original and mutated rules
-- Output: Merged rules
+- Output: `./data/step2/2.3_rules.json`
 
 ### 2.4 Rule Deduplication (Faiss Similarity)
 
@@ -158,8 +158,10 @@ We use the all-mpnet-base-v2 embedding model to project all rules into an embedd
 ```bash
 python step2.4_dedupulicate.py
 ```
-- Input: Merged rules
-- Output: Deduplicated results, Faiss index
+- Input: `./data/step2/2.3_rules.json`
+- Output:
+  - Deduplication results: .`/data/step2/deduplication/2.3_rules_duplicates.jsonl`
+  - Faiss index: `./data/step2/deduplication/2.3_rules.faiss`
 
 ### 2.5 Deduplication Statistics
 
@@ -168,8 +170,8 @@ Check deduplication statistics.
 ```bash
 python step2.5_count_deduplication.py
 ```
-- Input: Deduplication results
-- Output: Statistics
+- Input: `./data/step2/deduplication/2.3_rules_duplicates.jsonl`
+- Output: `./data/step2/deduplication/2.5_deduplication_stats.json`
 
 ### 2.6 Rule Scoring (DeepSeek V3)
 
@@ -178,8 +180,10 @@ python step2.5_count_deduplication.py
 ```bash
 python step2.6_ds-v3_scoring.py
 ```
-- Input: Deduplicated rules
-- Output: Scored rules (with checkpointing)
+- Input: `./data/step2/deduplication/2.3_rules_duplicates.jsonl`
+- Output:
+  - Scored rules: `./data/step2/2.6_rules_scoring.json`
+  - Checkpoint: `./data/scoring_checkpoint/scoring_checkpoint.pkl`
 
 ### 2.7 Score Analysis
 
@@ -188,8 +192,8 @@ Check score.
 ```bash
 python step2.7_analyze_score.py
 ```
-- Input: Scored rules
-- Output: Analysis report
+- Input: `./data/step2/2.6_rules_scoring.json`
+- Output: `./data/step2/2.7_score_analysis.json`
 
 ### 2.8 Rule Filtering
 
@@ -198,8 +202,8 @@ Filter rules based on deduplication and scores.
 ```bash
 python step2.8_filter_rules.py
 ```
-- Input: Scored rules
-- Output: Final rule set
+- Input: `./data/step2/2.6_rules_scoring.json`
+- Output: `./data/step2/2.8_final_rules.json`
 
 ---
 
