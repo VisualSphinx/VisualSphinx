@@ -5,7 +5,7 @@ This is the official repository for paper "[VisualSphinx: Large-Scale Synthetic 
 
 VisualSphinx is the largest fully-synthetic open-source dataset providing vision logic puzzles. It consists of over 660K automatically generated logical visual puzzles. Each logical puzzle is grounded with an interpretable rule and accompanied by both correct answers and plausible distractors.
 
-- 🌐 [Project Website](https://visualsphinx.github.io/) - To discover more about VisualSphinx
+- 🌐 [Project Website](https://visualsphinx.github.io/) - Discover more about VisualSphinx
 - 📖 [Technical Report]() - Discover the methodology and technical details behind VisualSphinx
 - 🔧 [Github Repo](https://github.com/VisualSphinx/VisualSphinx) - Access the complete pipeline used to produce VisualSphinx-V1
 - 🤗 HF Datasets - Find all VisualSphinx-V1 datasets
