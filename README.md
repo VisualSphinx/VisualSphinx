@@ -6,7 +6,7 @@ This is the official repository for paper "VisualSphinx: Large-Scale Synthetic V
 VisualSphinx is the largest fully-synthetic open-source dataset providing vision logic puzzles. It consists of over 660K automatically generated logical visual puzzles. Each logical puzzle is grounded with an interpretable rule and accompanied by both correct answers and plausible distractors.
 
 - 🌐 [Project Website](https://visualsphinx.github.io/) - Learn more about VisualSphinx
-- 📖 [Technical Report]() - Discover the methodology and technical details behind VisualSphinx
+- 📖 [Technical Report](https://arxiv.org/abs/2505.23977) - Discover the methodology and technical details behind VisualSphinx
 - 🔧 [Github Repo](https://github.com/VisualSphinx/VisualSphinx) - Access the complete pipeline used to produce VisualSphinx-V1
 - 🤗 HF Datasets - Find all VisualSphinx-V1 datasets
   - [VisualSphinx-V1 (Raw)](https://huggingface.co/datasets/VisualSphinx/VisualSphinx-V1-Raw);
@@ -55,6 +55,13 @@ Please refer to [verl](https://github.com/volcengine/verl) for RL training using
 
 If you find the model, data, or code useful, please cite:
 ```
-@article{
+@misc{feng2025visualsphinx,
+      title={VisualSphinx: Large-Scale Synthetic Vision Logic Puzzles for RL}, 
+      author={Yichen Feng and Zhangchen Xu and Fengqing Jiang and Yuetai Li and Bhaskar Ramasubramanian and Luyao Niu and Bill Yuchen Lin and Radha Poovendran},
+      year={2025},
+      eprint={2505.23977},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2505.23977}, 
 }
 ```
