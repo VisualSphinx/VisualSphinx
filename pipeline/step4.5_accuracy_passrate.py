@@ -21,7 +21,7 @@ import multiprocessing as mp
 #                           !!!  WARNING  !!!                         #
 #                        USE YOUR MODEL ID HERE!!!!!!!!!              #
 #######################################################################
-MODEL_ID = "Qwen/Qwen2.5-VL-7B-Instruct"
+MODEL_ID = "VisualSphinx/VisualSphinx-Difficulty-Tagging"
 
 NUM_REPETITIONS = 8
 DEFAULT_BATCH_SIZE = 512  # This is PER GPU/WORKER

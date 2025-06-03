@@ -15,7 +15,7 @@ from vllm import LLM, SamplingParams
 #                           !!!  WARNING  !!!                         #
 #                        USE YOUR MODEL ID HERE!!!!!!!!!              #
 #######################################################################
-MODEL_ID = "zhangchenxu/Qwen2.5-VL-7B-Instruct-vlr_step256"
+MODEL_ID = "VisualSphinx/VisualSphinx-Difficulty-Tagging"
 
 NUM_REPETITIONS = 8
 DEFAULT_BATCH_SIZE = 512
